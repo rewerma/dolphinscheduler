@@ -24,45 +24,61 @@ import org.apache.dolphinscheduler.common.thread.Stopper;
 import org.apache.dolphinscheduler.remote.NettyRemotingServer;
 import org.apache.dolphinscheduler.remote.command.CommandType;
 import org.apache.dolphinscheduler.remote.config.NettyServerConfig;
+import org.apache.dolphinscheduler.server.log.LoggerRequestProcessor;
+import org.apache.dolphinscheduler.server.log.LoggerServer;
 import org.apache.dolphinscheduler.server.worker.config.WorkerConfig;
 import org.apache.dolphinscheduler.server.worker.plugin.TaskPluginManager;
-import org.apache.dolphinscheduler.server.worker.processor.DBTaskAckProcessor;
-import org.apache.dolphinscheduler.server.worker.processor.DBTaskResponseProcessor;
-import org.apache.dolphinscheduler.server.worker.processor.HostUpdateProcessor;
-import org.apache.dolphinscheduler.server.worker.processor.TaskExecuteProcessor;
-import org.apache.dolphinscheduler.server.worker.processor.TaskKillProcessor;
+import org.apache.dolphinscheduler.server.worker.processor.*;
 import org.apache.dolphinscheduler.server.worker.registry.WorkerRegistryClient;
 import org.apache.dolphinscheduler.server.worker.runner.RetryReportTaskStatusThread;
 import org.apache.dolphinscheduler.server.worker.runner.WorkerManagerThread;
 import org.apache.dolphinscheduler.service.alert.AlertClientService;
 import org.apache.dolphinscheduler.service.bean.SpringApplicationContext;
-
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import javax.annotation.PostConstruct;
+import java.util.Set;
 
 /**
  * worker server
  */
-@ComponentScan(value = "org.apache.dolphinscheduler", excludeFilters = {
-    @ComponentScan.Filter(type = FilterType.REGEX, pattern = {
-        "org.apache.dolphinscheduler.server.master.*",
-        "org.apache.dolphinscheduler.server.monitor.*",
-        "org.apache.dolphinscheduler.server.log.*",
-        "org.apache.dolphinscheduler.alert.*"
-    })
-})
+@ComponentScan(value = "org.apache.dolphinscheduler")
 @EnableTransactionManagement
 public class WorkerServer implements IStoppable {
+
+
+    /**
+     *  netty server
+     */
+    private final NettyRemotingServer server;
+
+    /**
+     *  netty server config
+     */
+    private final NettyServerConfig serverConfig;
+
+    /**
+     *  loggger request processor
+     */
+    private final LoggerRequestProcessor requestProcessor;
+
+    public WorkerServer() {
+        this.serverConfig = new NettyServerConfig();
+        this.serverConfig.setListenPort(Constants.RPC_PORT);
+        this.server = new NettyRemotingServer(serverConfig);
+        this.requestProcessor = new LoggerRequestProcessor();
+        this.server.registerProcessor(CommandType.GET_LOG_BYTES_REQUEST, requestProcessor, requestProcessor.getExecutor());
+        this.server.registerProcessor(CommandType.ROLL_VIEW_LOG_REQUEST, requestProcessor, requestProcessor.getExecutor());
+        this.server.registerProcessor(CommandType.VIEW_WHOLE_LOG_REQUEST, requestProcessor, requestProcessor.getExecutor());
+        this.server.registerProcessor(CommandType.REMOVE_TAK_LOG_REQUEST, requestProcessor, requestProcessor.getExecutor());
+    }
+
 
     /**
      * logger
@@ -118,6 +134,9 @@ public class WorkerServer implements IStoppable {
             .web(WebApplicationType.NONE)
             .profiles("worker")
             .run(args);
+
+        final LoggerServer server = new LoggerServer();
+        server.start();
     }
 
     /**
@@ -199,5 +218,23 @@ public class WorkerServer implements IStoppable {
     @Override
     public void stop(String cause) {
         close(cause);
+    }
+
+
+    /**
+     * server start
+     */
+    public void start()  {
+        this.server.start();
+        logger.info("logger server started, listening on port : {}", Constants.RPC_PORT);
+        Runtime.getRuntime().addShutdownHook(new Thread(WorkerServer.this::stop));
+    }
+
+    /**
+     * stop
+     */
+    public void stop() {
+        this.server.close();
+        logger.info("logger server shut down");
     }
 }
