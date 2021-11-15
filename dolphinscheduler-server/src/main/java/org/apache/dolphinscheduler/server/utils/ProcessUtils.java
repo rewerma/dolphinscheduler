@@ -21,7 +21,7 @@ import org.apache.dolphinscheduler.common.Constants;
 import org.apache.dolphinscheduler.common.enums.ExecutionStatus;
 import org.apache.dolphinscheduler.common.utils.CommonUtils;
 import org.apache.dolphinscheduler.common.utils.FileUtils;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
+//import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.common.utils.LoggerUtils;
 import org.apache.dolphinscheduler.common.utils.OSUtils;
 import org.apache.dolphinscheduler.common.utils.PropertyUtils;
@@ -74,19 +74,19 @@ public class ProcessUtils {
             return;
         }
 
-        for (String appId : appIds) {
-            try {
-                ExecutionStatus applicationStatus = HadoopUtils.getInstance().getApplicationStatus(appId);
-
-                if (!applicationStatus.typeIsFinished()) {
-                    String commandFile = String.format("%s/%s.kill", executePath, appId);
-                    String cmd = getKerberosInitCommand() + "yarn application -kill " + appId;
-                    execYarnKillCommand(logger, tenantCode, appId, commandFile, cmd);
-                }
-            } catch (Exception e) {
-                logger.error("Get yarn application app id [{}}] status failed", appId, e);
-            }
-        }
+//        for (String appId : appIds) {
+//            try {
+//                ExecutionStatus applicationStatus = HadoopUtils.getInstance().getApplicationStatus(appId);
+//
+//                if (!applicationStatus.typeIsFinished()) {
+//                    String commandFile = String.format("%s/%s.kill", executePath, appId);
+//                    String cmd = getKerberosInitCommand() + "yarn application -kill " + appId;
+//                    execYarnKillCommand(logger, tenantCode, appId, commandFile, cmd);
+//                }
+//            } catch (Exception e) {
+//                logger.error("Get yarn application app id [{}}] status failed", appId, e);
+//            }
+//        }
     }
 
     /**

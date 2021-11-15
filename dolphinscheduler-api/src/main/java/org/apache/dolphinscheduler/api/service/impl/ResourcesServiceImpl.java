@@ -35,7 +35,7 @@ import org.apache.dolphinscheduler.common.Constants;
 import org.apache.dolphinscheduler.common.enums.ProgramType;
 import org.apache.dolphinscheduler.spi.enums.ResourceType;
 import org.apache.dolphinscheduler.common.utils.FileUtils;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
+//import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.common.utils.JSONUtils;
 import org.apache.dolphinscheduler.common.utils.PropertyUtils;
 import org.apache.dolphinscheduler.dao.entity.Resource;
@@ -316,17 +316,17 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
         }
         // verify whether the resource exists in storage
         // get the path of origin file in storage
-        String originHdfsFileName = HadoopUtils.getHdfsFileName(resource.getType(),tenantCode,originFullName);
-        try {
-            if (!HadoopUtils.getInstance().exists(originHdfsFileName)) {
-                logger.error("{} not exist", originHdfsFileName);
-                putMsg(result,Status.RESOURCE_NOT_EXIST);
-                return result;
-            }
-        } catch (IOException e) {
-            logger.error(e.getMessage(),e);
-            throw new ServiceException(Status.HDFS_OPERATION_ERROR);
-        }
+//        String originHdfsFileName = HadoopUtils.getHdfsFileName(resource.getType(),tenantCode,originFullName);
+//        try {
+//            if (!HadoopUtils.getInstance().exists(originHdfsFileName)) {
+//                logger.error("{} not exist", originHdfsFileName);
+//                putMsg(result,Status.RESOURCE_NOT_EXIST);
+//                return result;
+//            }
+//        } catch (IOException e) {
+//            logger.error(e.getMessage(),e);
+//            throw new ServiceException(Status.HDFS_OPERATION_ERROR);
+//        }
 
         if (!resource.isDirectory()) {
             //get the origin file suffix
@@ -436,28 +436,28 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
                 putMsg(result, Status.HDFS_OPERATION_ERROR);
                 throw new ServiceException(String.format("upload resource: %s file: %s failed.", name, file.getOriginalFilename()));
             }
-            if (!fullName.equals(originFullName)) {
-                try {
-                    HadoopUtils.getInstance().delete(originHdfsFileName,false);
-                } catch (IOException e) {
-                    logger.error(e.getMessage(),e);
-                    throw new ServiceException(String.format("delete resource: %s failed.", originFullName));
-                }
-            }
+//            if (!fullName.equals(originFullName)) {
+//                try {
+//                    HadoopUtils.getInstance().delete(originHdfsFileName,false);
+//                } catch (IOException e) {
+//                    logger.error(e.getMessage(),e);
+//                    throw new ServiceException(String.format("delete resource: %s failed.", originFullName));
+//                }
+//            }
             return result;
         }
 
         // get the path of dest file in hdfs
-        String destHdfsFileName = HadoopUtils.getHdfsFileName(resource.getType(),tenantCode,fullName);
+//        String destHdfsFileName = HadoopUtils.getHdfsFileName(resource.getType(),tenantCode,fullName);
 
-        try {
-            logger.info("start hdfs copy {} -> {}", originHdfsFileName, destHdfsFileName);
-            HadoopUtils.getInstance().copy(originHdfsFileName, destHdfsFileName, true, true);
-        } catch (Exception e) {
-            logger.error(MessageFormat.format("hdfs copy {0} -> {1} fail", originHdfsFileName, destHdfsFileName), e);
-            putMsg(result,Status.HDFS_COPY_FAIL);
-            throw new ServiceException(Status.HDFS_COPY_FAIL);
-        }
+//        try {
+//            logger.info("start hdfs copy {} -> {}", originHdfsFileName, destHdfsFileName);
+//            HadoopUtils.getInstance().copy(originHdfsFileName, destHdfsFileName, true, true);
+//        } catch (Exception e) {
+//            logger.error(MessageFormat.format("hdfs copy {0} -> {1} fail", originHdfsFileName, destHdfsFileName), e);
+//            putMsg(result,Status.HDFS_COPY_FAIL);
+//            throw new ServiceException(Status.HDFS_COPY_FAIL);
+//        }
 
         return result;
     }
@@ -548,22 +548,22 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
      */
     private void createDirectory(User loginUser,String fullName,ResourceType type,Result<Object> result) {
         String tenantCode = tenantMapper.queryById(loginUser.getTenantId()).getTenantCode();
-        String directoryName = HadoopUtils.getHdfsFileName(type,tenantCode,fullName);
-        String resourceRootPath = HadoopUtils.getHdfsDir(type,tenantCode);
+//        String directoryName = HadoopUtils.getHdfsFileName(type,tenantCode,fullName);
+//        String resourceRootPath = HadoopUtils.getHdfsDir(type,tenantCode);
         try {
-            if (!HadoopUtils.getInstance().exists(resourceRootPath)) {
-                createTenantDirIfNotExists(tenantCode);
-            }
+//            if (!HadoopUtils.getInstance().exists(resourceRootPath)) {
+//                createTenantDirIfNotExists(tenantCode);
+//            }
 
-            if (!HadoopUtils.getInstance().mkdir(directoryName)) {
-                logger.error("create resource directory {} of hdfs failed",directoryName);
-                putMsg(result,Status.HDFS_OPERATION_ERROR);
-                throw new ServiceException(String.format("create resource directory: %s failed.", directoryName));
-            }
+//            if (!HadoopUtils.getInstance().mkdir(directoryName)) {
+//                logger.error("create resource directory {} of hdfs failed",directoryName);
+//                putMsg(result,Status.HDFS_OPERATION_ERROR);
+//                throw new ServiceException(String.format("create resource directory: %s failed.", directoryName));
+//            }
         } catch (Exception e) {
-            logger.error("create resource directory {} of hdfs failed",directoryName);
-            putMsg(result,Status.HDFS_OPERATION_ERROR);
-            throw new ServiceException(String.format("create resource directory: %s failed.", directoryName));
+//            logger.error("create resource directory {} of hdfs failed",directoryName);
+//            putMsg(result,Status.HDFS_OPERATION_ERROR);
+//            throw new ServiceException(String.format("create resource directory: %s failed.", directoryName));
         }
     }
 
@@ -589,15 +589,15 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
         String localFilename = FileUtils.getUploadFilename(tenantCode, UUID.randomUUID().toString());
 
         // save file to hdfs, and delete original file
-        String hdfsFilename = HadoopUtils.getHdfsFileName(type,tenantCode,fullName);
-        String resourcePath = HadoopUtils.getHdfsDir(type,tenantCode);
+//        String hdfsFilename = HadoopUtils.getHdfsFileName(type,tenantCode,fullName);
+//        String resourcePath = HadoopUtils.getHdfsDir(type,tenantCode);
         try {
             // if tenant dir not exists
-            if (!HadoopUtils.getInstance().exists(resourcePath)) {
-                createTenantDirIfNotExists(tenantCode);
-            }
-            org.apache.dolphinscheduler.api.utils.FileUtils.copyFile(file, localFilename);
-            HadoopUtils.getInstance().copyLocalToHdfs(localFilename, hdfsFilename, true, true);
+//            if (!HadoopUtils.getInstance().exists(resourcePath)) {
+//                createTenantDirIfNotExists(tenantCode);
+//            }
+//            org.apache.dolphinscheduler.api.utils.FileUtils.copyFile(file, localFilename);
+//            HadoopUtils.getInstance().copyLocalToHdfs(localFilename, hdfsFilename, true, true);
         } catch (Exception e) {
             FileUtils.deleteFile(localFilename);
             logger.error(e.getMessage(), e);
@@ -723,14 +723,14 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
         }
 
         // get hdfs file by type
-        String hdfsFilename = HadoopUtils.getHdfsFileName(resource.getType(), tenantCode, resource.getFullName());
+//        String hdfsFilename = HadoopUtils.getHdfsFileName(resource.getType(), tenantCode, resource.getFullName());
 
         //delete data in database
         resourcesMapper.deleteIds(needDeleteResourceIdArray);
         resourceUserMapper.deleteResourceUserArray(0, needDeleteResourceIdArray);
 
         //delete file on hdfs
-        HadoopUtils.getInstance().delete(hdfsFilename, true);
+//        HadoopUtils.getInstance().delete(hdfsFilename, true);
         putMsg(result, Status.SUCCESS);
 
         return result;
@@ -757,11 +757,11 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
                 String tenantCode = tenant.getTenantCode();
 
                 try {
-                    String hdfsFilename = HadoopUtils.getHdfsFileName(type,tenantCode,fullName);
-                    if (HadoopUtils.getInstance().exists(hdfsFilename)) {
-                        logger.error("resource type:{} name:{} has exist in hdfs {}, can't create again.", type, RegexUtils.escapeNRT(fullName), hdfsFilename);
-                        putMsg(result, Status.RESOURCE_FILE_EXIST,hdfsFilename);
-                    }
+//                    String hdfsFilename = HadoopUtils.getHdfsFileName(type,tenantCode,fullName);
+//                    if (HadoopUtils.getInstance().exists(hdfsFilename)) {
+//                        logger.error("resource type:{} name:{} has exist in hdfs {}, can't create again.", type, RegexUtils.escapeNRT(fullName), hdfsFilename);
+//                        putMsg(result, Status.RESOURCE_FILE_EXIST,hdfsFilename);
+//                    }
 
                 } catch (Exception e) {
                     logger.error(e.getMessage(),e);
@@ -853,26 +853,26 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
         }
 
         // hdfs path
-        String hdfsFileName = HadoopUtils.getHdfsResourceFileName(tenantCode, resource.getFullName());
-        logger.info("resource hdfs path is {}", hdfsFileName);
-        try {
-            if (HadoopUtils.getInstance().exists(hdfsFileName)) {
-                List<String> content = HadoopUtils.getInstance().catFile(hdfsFileName, skipLineNum, limit);
-
-                putMsg(result, Status.SUCCESS);
-                Map<String, Object> map = new HashMap<>();
-                map.put(ALIAS, resource.getAlias());
-                map.put(CONTENT, String.join("\n", content));
-                result.setData(map);
-            } else {
-                logger.error("read file {} not exist in hdfs", hdfsFileName);
-                putMsg(result, Status.RESOURCE_FILE_NOT_EXIST,hdfsFileName);
-            }
-
-        } catch (Exception e) {
-            logger.error("Resource {} read failed", hdfsFileName, e);
-            putMsg(result, Status.HDFS_OPERATION_ERROR);
-        }
+//        String hdfsFileName = HadoopUtils.getHdfsResourceFileName(tenantCode, resource.getFullName());
+//        logger.info("resource hdfs path is {}", hdfsFileName);
+//        try {
+//            if (HadoopUtils.getInstance().exists(hdfsFileName)) {
+//                List<String> content = HadoopUtils.getInstance().catFile(hdfsFileName, skipLineNum, limit);
+//
+//                putMsg(result, Status.SUCCESS);
+//                Map<String, Object> map = new HashMap<>();
+//                map.put(ALIAS, resource.getAlias());
+//                map.put(CONTENT, String.join("\n", content));
+//                result.setData(map);
+//            } else {
+//                logger.error("read file {} not exist in hdfs", hdfsFileName);
+//                putMsg(result, Status.RESOURCE_FILE_NOT_EXIST,hdfsFileName);
+//            }
+//
+//        } catch (Exception e) {
+//            logger.error("Resource {} read failed", hdfsFileName, e);
+//            putMsg(result, Status.HDFS_OPERATION_ERROR);
+//        }
 
         return result;
     }
@@ -1048,20 +1048,20 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
             }
 
             // get resource file hdfs path
-            hdfsFileName = HadoopUtils.getHdfsResourceFileName(tenantCode, resourceName);
-            String resourcePath = HadoopUtils.getHdfsResDir(tenantCode);
-            logger.info("resource hdfs path is {}, resource dir is {}", hdfsFileName, resourcePath);
-
-            HadoopUtils hadoopUtils = HadoopUtils.getInstance();
-            if (!hadoopUtils.exists(resourcePath)) {
-                // create if tenant dir not exists
-                createTenantDirIfNotExists(tenantCode);
-            }
-            if (hadoopUtils.exists(hdfsFileName)) {
-                hadoopUtils.delete(hdfsFileName, false);
-            }
-
-            hadoopUtils.copyLocalToHdfs(localFilename, hdfsFileName, true, true);
+//            hdfsFileName = HadoopUtils.getHdfsResourceFileName(tenantCode, resourceName);
+//            String resourcePath = HadoopUtils.getHdfsResDir(tenantCode);
+//            logger.info("resource hdfs path is {}, resource dir is {}", hdfsFileName, resourcePath);
+//
+//            HadoopUtils hadoopUtils = HadoopUtils.getInstance();
+//            if (!hadoopUtils.exists(resourcePath)) {
+//                // create if tenant dir not exists
+//                createTenantDirIfNotExists(tenantCode);
+//            }
+//            if (hadoopUtils.exists(hdfsFileName)) {
+//                hadoopUtils.delete(hdfsFileName, false);
+//            }
+//
+//            hadoopUtils.copyLocalToHdfs(localFilename, hdfsFileName, true, true);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             result.setCode(Status.HDFS_OPERATION_ERROR.getCode());
@@ -1112,13 +1112,13 @@ public class ResourcesServiceImpl extends BaseServiceImpl implements ResourcesSe
 
         String tenantCode = tenant.getTenantCode();
 
-        String hdfsFileName = HadoopUtils.getHdfsFileName(resource.getType(), tenantCode, resource.getFullName());
-
-        String localFileName = FileUtils.getDownloadFilename(resource.getAlias());
-        logger.info("resource hdfs path is {}, download local filename is {}", hdfsFileName, localFileName);
-
-        HadoopUtils.getInstance().copyHdfsToLocal(hdfsFileName, localFileName, false, true);
-        return org.apache.dolphinscheduler.api.utils.FileUtils.file2Resource(localFileName);
+//        String hdfsFileName = HadoopUtils.getHdfsFileName(resource.getType(), tenantCode, resource.getFullName());
+//
+//        String localFileName = FileUtils.getDownloadFilename(resource.getAlias());
+//        logger.info("resource hdfs path is {}, download local filename is {}", hdfsFileName, localFileName);
+//
+//        HadoopUtils.getInstance().copyHdfsToLocal(hdfsFileName, localFileName, false, true);
+        return  null; //org.apache.dolphinscheduler.api.utils.FileUtils.file2Resource(localFileName);
     }
 
     /**

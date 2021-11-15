@@ -29,7 +29,7 @@ import org.apache.dolphinscheduler.common.task.sql.SqlParameters;
 import org.apache.dolphinscheduler.common.task.sqoop.SqoopParameters;
 import org.apache.dolphinscheduler.common.task.sqoop.sources.SourceMysqlParameter;
 import org.apache.dolphinscheduler.common.task.sqoop.targets.TargetMysqlParameter;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
+//import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.common.utils.JSONUtils;
 import org.apache.dolphinscheduler.common.utils.TaskParametersUtils;
 import org.apache.dolphinscheduler.dao.entity.DataSource;
@@ -299,7 +299,7 @@ public abstract class BaseTaskProcessor implements ITaskProcessor {
         DataSource datasource = processService.findDataSourceById(datasourceId);
         sqlTaskExecutionContext.setConnectionParams(datasource.getConnectionParams());
 
-        sqlTaskExecutionContext.setDefaultFS(HadoopUtils.getInstance().getDefaultFS());
+//        sqlTaskExecutionContext.setDefaultFS(HadoopUtils.getInstance().getDefaultFS());
 
         // whether udf type
         boolean udfTypeFlag = Enums.getIfPresent(UdfType.class, Strings.nullToEmpty(sqlParameters.getType())).isPresent()

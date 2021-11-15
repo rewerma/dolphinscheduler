@@ -23,7 +23,7 @@ import static org.apache.dolphinscheduler.common.Constants.RESOURCE_VIEW_SUFFIXS
 import static org.apache.dolphinscheduler.common.Constants.UTF_8;
 import static org.apache.dolphinscheduler.common.Constants.YYYYMMDDHHMMSS;
 
-import org.apache.commons.io.IOUtils;
+//import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

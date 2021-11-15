@@ -21,7 +21,7 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 import org.apache.dolphinscheduler.common.Constants;
 import org.apache.dolphinscheduler.common.enums.ExecutionStatus;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
+//import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.common.utils.OSUtils;
 import org.apache.dolphinscheduler.common.utils.PropertyUtils;
 
@@ -43,7 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({System.class, OSUtils.class, HadoopUtils.class, PropertyUtils.class, SystemUtils.class})
+@PrepareForTest({System.class, OSUtils.class,/* HadoopUtils.class,*/ PropertyUtils.class, SystemUtils.class})
 public class ProcessUtilsTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ProcessUtils.class);
@@ -75,31 +75,31 @@ public class ProcessUtilsTest {
         Assert.assertEquals("", ProcessUtils.getKerberosInitCommand());
     }
 
-    @Test
-    public void testCancelApplication() {
-        List<String> appIds = new ArrayList<>();
-        appIds.add("application_1585532379175_228491");
-        appIds.add("application_1598885606600_3677");
-        String tenantCode = "dev";
-        String executePath = "/ds-exec/1/1/1";
-        ExecutionStatus running = ExecutionStatus.RUNNING_EXECUTION;
-
-        PowerMockito.mockStatic(HadoopUtils.class);
-        HadoopUtils hadoop = HadoopUtils.getInstance();
-
-        try {
-            PowerMockito.whenNew(HadoopUtils.class).withAnyArguments().thenReturn(hadoop);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            when(hadoop.getApplicationStatus("application_1585532379175_228491")).thenReturn(running);
-            when(hadoop.getApplicationStatus("application_1598885606600_3677")).thenReturn(running);
-        } catch (Exception e) {
-            e.printStackTrace();
-            ProcessUtils.cancelApplication(appIds, logger, tenantCode, executePath);
-        }
-
-        Assert.assertNotNull(appIds);
-    }
+//    @Test
+//    public void testCancelApplication() {
+//        List<String> appIds = new ArrayList<>();
+//        appIds.add("application_1585532379175_228491");
+//        appIds.add("application_1598885606600_3677");
+//        String tenantCode = "dev";
+//        String executePath = "/ds-exec/1/1/1";
+//        ExecutionStatus running = ExecutionStatus.RUNNING_EXECUTION;
+//
+//        PowerMockito.mockStatic(HadoopUtils.class);
+//        HadoopUtils hadoop = HadoopUtils.getInstance();
+//
+//        try {
+//            PowerMockito.whenNew(HadoopUtils.class).withAnyArguments().thenReturn(hadoop);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            when(hadoop.getApplicationStatus("application_1585532379175_228491")).thenReturn(running);
+//            when(hadoop.getApplicationStatus("application_1598885606600_3677")).thenReturn(running);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            ProcessUtils.cancelApplication(appIds, logger, tenantCode, executePath);
+//        }
+//
+//        Assert.assertNotNull(appIds);
+//    }
 }

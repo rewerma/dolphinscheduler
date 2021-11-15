@@ -22,8 +22,8 @@ import org.apache.dolphinscheduler.spi.enums.ResUploadType;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.security.UserGroupInformation;
+//import org.apache.hadoop.conf.Configuration;
+//import org.apache.hadoop.security.UserGroupInformation;
 
 import java.io.IOException;
 import java.net.URL;
@@ -96,11 +96,11 @@ public class CommonUtils {
      * @return load kerberos config return true
      * @throws IOException errors
      */
-    public static boolean loadKerberosConf(Configuration configuration) throws IOException {
-        return loadKerberosConf(PropertyUtils.getString(Constants.JAVA_SECURITY_KRB5_CONF_PATH),
-                PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_USERNAME),
-                PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_PATH), configuration);
-    }
+//    public static boolean loadKerberosConf(Configuration configuration) throws IOException {
+//        return loadKerberosConf(PropertyUtils.getString(Constants.JAVA_SECURITY_KRB5_CONF_PATH),
+//                PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_USERNAME),
+//                PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_PATH), configuration);
+//    }
 
     /**
      * load kerberos configuration
@@ -110,9 +110,9 @@ public class CommonUtils {
      * @param loginUserKeytabPath loginUserKeytabPath
      * @throws IOException errors
      */
-    public static void loadKerberosConf(String javaSecurityKrb5Conf, String loginUserKeytabUsername, String loginUserKeytabPath) throws IOException {
-        loadKerberosConf(javaSecurityKrb5Conf, loginUserKeytabUsername, loginUserKeytabPath, new Configuration());
-    }
+//    public static void loadKerberosConf(String javaSecurityKrb5Conf, String loginUserKeytabUsername, String loginUserKeytabPath) throws IOException {
+//        loadKerberosConf(javaSecurityKrb5Conf, loginUserKeytabUsername, loginUserKeytabPath, new Configuration());
+//    }
 
     /**
      * load kerberos configuration
@@ -124,17 +124,17 @@ public class CommonUtils {
      * @return load kerberos config return true
      * @throws IOException errors
      */
-    public static boolean loadKerberosConf(String javaSecurityKrb5Conf, String loginUserKeytabUsername, String loginUserKeytabPath, Configuration configuration) throws IOException {
-        if (CommonUtils.getKerberosStartupState()) {
-            System.setProperty(Constants.JAVA_SECURITY_KRB5_CONF, StringUtils.defaultIfBlank(javaSecurityKrb5Conf, PropertyUtils.getString(Constants.JAVA_SECURITY_KRB5_CONF_PATH)));
-            configuration.set(Constants.HADOOP_SECURITY_AUTHENTICATION, Constants.KERBEROS);
-            UserGroupInformation.setConfiguration(configuration);
-            UserGroupInformation.loginUserFromKeytab(StringUtils.defaultIfBlank(loginUserKeytabUsername, PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_USERNAME)),
-                    StringUtils.defaultIfBlank(loginUserKeytabPath, PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_PATH)));
-            return true;
-        }
-        return false;
-    }
+//    public static boolean loadKerberosConf(String javaSecurityKrb5Conf, String loginUserKeytabUsername, String loginUserKeytabPath, Configuration configuration) throws IOException {
+//        if (CommonUtils.getKerberosStartupState()) {
+//            System.setProperty(Constants.JAVA_SECURITY_KRB5_CONF, StringUtils.defaultIfBlank(javaSecurityKrb5Conf, PropertyUtils.getString(Constants.JAVA_SECURITY_KRB5_CONF_PATH)));
+//            configuration.set(Constants.HADOOP_SECURITY_AUTHENTICATION, Constants.KERBEROS);
+//            UserGroupInformation.setConfiguration(configuration);
+//            UserGroupInformation.loginUserFromKeytab(StringUtils.defaultIfBlank(loginUserKeytabUsername, PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_USERNAME)),
+//                    StringUtils.defaultIfBlank(loginUserKeytabPath, PropertyUtils.getString(Constants.LOGIN_USER_KEY_TAB_PATH)));
+//            return true;
+//        }
+//        return false;
+//    }
 
     /**
      * encode password

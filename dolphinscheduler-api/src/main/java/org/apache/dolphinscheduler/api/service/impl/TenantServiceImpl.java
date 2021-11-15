@@ -23,7 +23,7 @@ import org.apache.dolphinscheduler.api.utils.PageInfo;
 import org.apache.dolphinscheduler.api.utils.RegexUtils;
 import org.apache.dolphinscheduler.api.utils.Result;
 import org.apache.dolphinscheduler.common.Constants;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
+//import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.common.utils.PropertyUtils;
 import org.apache.dolphinscheduler.dao.entity.ProcessDefinition;
 import org.apache.dolphinscheduler.dao.entity.ProcessInstance;
@@ -184,21 +184,21 @@ public class TenantServiceImpl extends BaseServiceImpl implements TenantService 
         /**
          * if the tenant code is modified, the original resource needs to be copied to the new tenant.
          */
-        if (!tenant.getTenantCode().equals(tenantCode)) {
-            if (checkTenantExists(tenantCode)) {
-                // if hdfs startup
-                if (PropertyUtils.getResUploadStartupState()) {
-                    String resourcePath = HadoopUtils.getHdfsDataBasePath() + "/" + tenantCode + "/resources";
-                    String udfsPath = HadoopUtils.getHdfsUdfDir(tenantCode);
-                    //init hdfs resource
-                    HadoopUtils.getInstance().mkdir(resourcePath);
-                    HadoopUtils.getInstance().mkdir(udfsPath);
-                }
-            } else {
-                putMsg(result, Status.OS_TENANT_CODE_HAS_ALREADY_EXISTS);
-                return result;
-            }
-        }
+//        if (!tenant.getTenantCode().equals(tenantCode)) {
+//            if (checkTenantExists(tenantCode)) {
+//                // if hdfs startup
+//                if (PropertyUtils.getResUploadStartupState()) {
+//                    String resourcePath = HadoopUtils.getHdfsDataBasePath() + "/" + tenantCode + "/resources";
+//                    String udfsPath = HadoopUtils.getHdfsUdfDir(tenantCode);
+//                    //init hdfs resource
+//                    HadoopUtils.getInstance().mkdir(resourcePath);
+//                    HadoopUtils.getInstance().mkdir(udfsPath);
+//                }
+//            } else {
+//                putMsg(result, Status.OS_TENANT_CODE_HAS_ALREADY_EXISTS);
+//                return result;
+//            }
+//        }
 
         Date now = new Date();
 
@@ -261,13 +261,13 @@ public class TenantServiceImpl extends BaseServiceImpl implements TenantService 
         }
 
         // if resource upload startup
-        if (PropertyUtils.getResUploadStartupState()) {
-            String tenantPath = HadoopUtils.getHdfsDataBasePath() + "/" + tenant.getTenantCode();
-
-            if (HadoopUtils.getInstance().exists(tenantPath)) {
-                HadoopUtils.getInstance().delete(tenantPath, true);
-            }
-        }
+//        if (PropertyUtils.getResUploadStartupState()) {
+//            String tenantPath = HadoopUtils.getHdfsDataBasePath() + "/" + tenant.getTenantCode();
+//
+//            if (HadoopUtils.getInstance().exists(tenantPath)) {
+//                HadoopUtils.getInstance().delete(tenantPath, true);
+//            }
+//        }
 
         tenantMapper.deleteById(id);
         processInstanceMapper.updateProcessInstanceByTenantId(id, -1);

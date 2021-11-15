@@ -594,7 +594,7 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.connector.version}</version>
-                <scope>test</scope>
+<!--                <scope>test</scope>-->
             </dependency>
             <dependency>
                 <groupId>com.h2database</groupId>
@@ -1141,5 +1141,6 @@
         <module>dolphinscheduler-datasource-plugin</module>
         <module>dolphinscheduler-python</module>
         <module>dolphinscheduler-meter</module>
+        <module>dolphinscheduler-worker</module>
     </modules>
 </project>

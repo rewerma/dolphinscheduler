@@ -28,7 +28,7 @@ import org.apache.dolphinscheduler.dao.entity.ProcessInstance;
 import org.apache.dolphinscheduler.dao.entity.TaskInstance;
 import org.apache.dolphinscheduler.server.master.cache.ProcessInstanceExecCacheManager;
 
-import org.apache.hadoop.util.ThreadUtil;
+//import org.apache.hadoop.util.ThreadUtil;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -70,7 +70,7 @@ public class StateWheelExecuteThread extends Thread {
             } catch (Exception e) {
                 logger.error("state wheel thread check error:", e);
             }
-            ThreadUtil.sleepAtLeastIgnoreInterrupts(stateCheckIntervalSecs);
+//            ThreadUtil.sleepAtLeastIgnoreInterrupts(stateCheckIntervalSecs);
         }
     }
 

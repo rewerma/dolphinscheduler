@@ -17,41 +17,23 @@
 
 package org.apache.dolphinscheduler.server.worker.plugin;
 
-import static java.lang.String.format;
-
-import org.apache.dolphinscheduler.common.enums.PluginType;
-import org.apache.dolphinscheduler.dao.PluginDao;
-import org.apache.dolphinscheduler.dao.entity.PluginDefine;
-import org.apache.dolphinscheduler.spi.params.PluginParamsTransfer;
-import org.apache.dolphinscheduler.spi.params.base.PluginParams;
 import org.apache.dolphinscheduler.spi.task.TaskChannel;
 import org.apache.dolphinscheduler.spi.task.TaskChannelFactory;
-
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static java.lang.String.format;
 
 @Component
 public class TaskPluginManager {
     private static final Logger logger = LoggerFactory.getLogger(TaskPluginManager.class);
 
     private final Map<String, TaskChannel> taskChannelMap = new ConcurrentHashMap<>();
-
-    private final PluginDao pluginDao;
-
-    public TaskPluginManager(PluginDao pluginDao) {
-        this.pluginDao = pluginDao;
-    }
 
     private void loadTaskChannel(TaskChannelFactory taskChannelFactory) {
         TaskChannel taskChannel = taskChannelFactory.create();
@@ -79,14 +61,14 @@ public class TaskPluginManager {
 
             logger.info("Registered task plugin: {}", name);
 
-            List<PluginParams> params = factory.getParams();
-            String paramsJson = PluginParamsTransfer.transferParamsToJson(params);
-
-            PluginDefine pluginDefine = new PluginDefine(name, PluginType.TASK.getDesc(), paramsJson);
-            int count = pluginDao.addOrUpdatePluginDefine(pluginDefine);
-            if (count <= 0) {
-                throw new RuntimeException("Failed to update task plugin: " + name);
-            }
+//            List<PluginParams> params = factory.getParams();
+//            String paramsJson = PluginParamsTransfer.transferParamsToJson(params);
+//
+//            PluginDefine pluginDefine = new PluginDefine(name, PluginType.TASK.getDesc(), paramsJson);
+//            int count = pluginDao.addOrUpdatePluginDefine(pluginDefine);
+//            if (count <= 0) {
+//                throw new RuntimeException("Failed to update task plugin: " + name);
+//            }
         });
     }
 }

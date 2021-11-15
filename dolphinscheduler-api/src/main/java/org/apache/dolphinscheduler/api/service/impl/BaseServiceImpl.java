@@ -23,7 +23,7 @@ import org.apache.dolphinscheduler.api.utils.Result;
 import org.apache.dolphinscheduler.common.Constants;
 import org.apache.dolphinscheduler.common.enums.UserType;
 import org.apache.dolphinscheduler.common.utils.DateUtils;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
+//import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.dao.entity.User;
 
 import org.apache.commons.lang.StringUtils;
@@ -129,11 +129,11 @@ public class BaseServiceImpl implements BaseService {
      */
     @Override
     public void createTenantDirIfNotExists(String tenantCode) throws IOException {
-        String resourcePath = HadoopUtils.getHdfsResDir(tenantCode);
-        String udfsPath = HadoopUtils.getHdfsUdfDir(tenantCode);
-        // init resource path and udf path
-        HadoopUtils.getInstance().mkdir(resourcePath);
-        HadoopUtils.getInstance().mkdir(udfsPath);
+//        String resourcePath = HadoopUtils.getHdfsResDir(tenantCode);
+//        String udfsPath = HadoopUtils.getHdfsUdfDir(tenantCode);
+//        // init resource path and udf path
+//        HadoopUtils.getInstance().mkdir(resourcePath);
+//        HadoopUtils.getInstance().mkdir(udfsPath);
     }
 
     /**

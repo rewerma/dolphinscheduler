@@ -49,7 +49,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.facebook.presto.jdbc.internal.guava.base.Strings;
 
 /**
  * worker group service impl
@@ -155,7 +154,7 @@ public class WorkerGroupServiceImpl extends BaseServiceImpl implements WorkerGro
      */
     private String checkWorkerGroupAddrList(WorkerGroup workerGroup) {
         Map<String, String> serverMaps = registryClient.getServerMaps(NodeType.WORKER, true);
-        if (Strings.isNullOrEmpty(workerGroup.getAddrList())) {
+        if (StringUtils.isEmpty(workerGroup.getAddrList())) {
             return null;
         }
         for (String addr : workerGroup.getAddrList().split(Constants.COMMA)) {

@@ -135,11 +135,12 @@ public class TaskKillProcessor implements NettyRequestProcessor {
             logger.error("kill task error", e);
         }
         // find log and kill yarn job
-        Pair<Boolean, List<String>> yarnResult = killYarnJob(Host.of(taskExecutionContext.getHost()).getIp(),
-                taskExecutionContext.getLogPath(),
-                taskExecutionContext.getExecutePath(),
-                taskExecutionContext.getTenantCode());
-        return Pair.of(processFlag && yarnResult.getLeft(), yarnResult.getRight());
+//        Pair<Boolean, List<String>> yarnResult = killYarnJob(Host.of(taskExecutionContext.getHost()).getIp(),
+//                taskExecutionContext.getLogPath(),
+//                taskExecutionContext.getExecutePath(),
+//                taskExecutionContext.getTenantCode());
+//        return Pair.of(processFlag && yarnResult.getLeft(), yarnResult.getRight());
+        return Pair.of(processFlag, appIds);
     }
 
     /**
@@ -176,26 +177,26 @@ public class TaskKillProcessor implements NettyRequestProcessor {
      * @param tenantCode tenantCode
      * @return Pair<Boolean, List < String>> yarn kill result
      */
-    private Pair<Boolean, List<String>> killYarnJob(String host, String logPath, String executePath, String tenantCode) {
-        try (LogClientService logClient = new LogClientService();) {
-            logger.info("view log host : {},logPath : {}", host, logPath);
-            String log = logClient.viewLog(host, Constants.RPC_PORT, logPath);
-            List<String> appIds = Collections.emptyList();
-            if (!StringUtils.isEmpty(log)) {
-                appIds = LoggerUtils.getAppIds(log, logger);
-                if (StringUtils.isEmpty(executePath)) {
-                    logger.error("task instance execute path is empty");
-                    throw new RuntimeException("task instance execute path is empty");
-                }
-                if (appIds.size() > 0) {
-                    ProcessUtils.cancelApplication(appIds, logger, tenantCode, executePath);
-                }
-            }
-            return Pair.of(true, appIds);
-        } catch (Exception e) {
-            logger.error("kill yarn job error", e);
-        }
-        return Pair.of(false, Collections.emptyList());
-    }
+//    private Pair<Boolean, List<String>> killYarnJob(String host, String logPath, String executePath, String tenantCode) {
+//        try (LogClientService logClient = new LogClientService();) {
+//            logger.info("view log host : {},logPath : {}", host, logPath);
+//            String log = logClient.viewLog(host, Constants.RPC_PORT, logPath);
+//            List<String> appIds = Collections.emptyList();
+//            if (!StringUtils.isEmpty(log)) {
+//                appIds = LoggerUtils.getAppIds(log, logger);
+//                if (StringUtils.isEmpty(executePath)) {
+//                    logger.error("task instance execute path is empty");
+//                    throw new RuntimeException("task instance execute path is empty");
+//                }
+//                if (appIds.size() > 0) {
+//                    ProcessUtils.cancelApplication(appIds, logger, tenantCode, executePath);
+//                }
+//            }
+//            return Pair.of(true, appIds);
+//        } catch (Exception e) {
+//            logger.error("kill yarn job error", e);
+//        }
+//        return Pair.of(false, Collections.emptyList());
+//    }
 
 }

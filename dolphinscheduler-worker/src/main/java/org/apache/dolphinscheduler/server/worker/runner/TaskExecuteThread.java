@@ -27,7 +27,6 @@ import org.apache.dolphinscheduler.common.enums.TaskType;
 import org.apache.dolphinscheduler.common.process.Property;
 import org.apache.dolphinscheduler.common.utils.CommonUtils;
 import org.apache.dolphinscheduler.common.utils.DateUtils;
-import org.apache.dolphinscheduler.common.utils.HadoopUtils;
 import org.apache.dolphinscheduler.common.utils.JSONUtils;
 import org.apache.dolphinscheduler.common.utils.LoggerUtils;
 import org.apache.dolphinscheduler.common.utils.OSUtils;
@@ -272,7 +271,7 @@ public class TaskExecuteThread implements Runnable, Delayed {
         if (task != null) {
             try {
                 task.cancelApplication(true);
-                ProcessUtils.killYarnJob(taskExecutionContext);
+//                ProcessUtils.killYarnJob(taskExecutionContext);
             } catch (Exception e) {
                 logger.error(e.getMessage(), e);
             }
@@ -287,31 +286,31 @@ public class TaskExecuteThread implements Runnable, Delayed {
      * @param logger logger
      */
     private void downloadResource(String execLocalPath, Map<String, String> projectRes, Logger logger) {
-        if (MapUtils.isEmpty(projectRes)) {
-            return;
-        }
-
-        Set<Map.Entry<String, String>> resEntries = projectRes.entrySet();
-
-        for (Map.Entry<String, String> resource : resEntries) {
-            String fullName = resource.getKey();
-            String tenantCode = resource.getValue();
-            File resFile = new File(execLocalPath, fullName);
-            if (!resFile.exists()) {
-                try {
-                    // query the tenant code of the resource according to the name of the resource
-                    String resHdfsPath = HadoopUtils.getHdfsResourceFileName(tenantCode, fullName);
-
-                    logger.info("get resource file from hdfs :{}", resHdfsPath);
-                    HadoopUtils.getInstance().copyHdfsToLocal(resHdfsPath, execLocalPath + File.separator + fullName, false, true);
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                    throw new RuntimeException(e.getMessage());
-                }
-            } else {
-                logger.info("file : {} exists ", resFile.getName());
-            }
-        }
+//        if (MapUtils.isEmpty(projectRes)) {
+//            return;
+//        }
+//
+//        Set<Map.Entry<String, String>> resEntries = projectRes.entrySet();
+//
+//        for (Map.Entry<String, String> resource : resEntries) {
+//            String fullName = resource.getKey();
+//            String tenantCode = resource.getValue();
+//            File resFile = new File(execLocalPath, fullName);
+//            if (!resFile.exists()) {
+//                try {
+//                    // query the tenant code of the resource according to the name of the resource
+//                    String resHdfsPath = HadoopUtils.getHdfsResourceFileName(tenantCode, fullName);
+//
+//                    logger.info("get resource file from hdfs :{}", resHdfsPath);
+//                    HadoopUtils.getInstance().copyHdfsToLocal(resHdfsPath, execLocalPath + File.separator + fullName, false, true);
+//                } catch (Exception e) {
+//                    logger.error(e.getMessage(), e);
+//                    throw new RuntimeException(e.getMessage());
+//                }
+//            } else {
+//                logger.info("file : {} exists ", resFile.getName());
+//            }
+//        }
     }
 
     /**
